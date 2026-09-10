@@ -1,0 +1,425 @@
+/* ============================================================
+   ⚙️  BAGIAN YANG BISA KAMU GANTI ADA DI SINI (CONFIG)
+   Cari komentar "GANTI DI SINI" di index.html & script.js
+   untuk ubah nama, tanggal, foto, pesan, dan musik.
+   ============================================================ */
+
+   :root{
+    --blush: #fbf7f1;
+    --rose: #f3d9c2;
+    --rose-deep: #8a9a7c;
+    --plum: #3f4a3a;
+    --cream: #ffffff;
+    --gold: #dba876;
+  }
+  
+  *{ box-sizing: border-box; }
+  
+  html, body{
+    margin:0;
+    height: 100%;
+    color: var(--plum);
+    font-family: 'Quicksand', sans-serif;
+    overflow: hidden;
+  }
+  
+  h1, h2, .display{
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+  }
+  
+  /* ---------- Screens (satu tampil, sisanya sembunyi) ---------- */
+  .stage{
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+  .screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 40px 28px;
+    overflow-y: auto;
+  }
+  .screen.active{
+    display:flex;
+    animation: screenIn 0.6s ease both;
+  }
+  @keyframes screenIn{
+    from{ opacity: 0; transform: translateY(18px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .screen.active{ animation: none; }
+  }
+  
+  /* ---------- Tombol umum ---------- */
+  .btn.ghost{
+    color: var(--rose-deep);
+    border-color: var(--rose-deep);
+  }
+  
+  .screen-1{ background: linear-gradient(160deg, var(--blush), var(--rose)); }
+  .screen-2{ background: linear-gradient(160deg, var(--rose), var(--blush)); }
+  .screen-3{ background: var(--blush); }
+  .screen-4{ background: var(--cream); justify-content: flex-start; padding-top: 64px; padding-bottom: 64px; }
+  .screen-5{ background: var(--cream); }
+  .screen-6{ background: linear-gradient(160deg, var(--blush), var(--rose)); }
+  .screen-7{ background: var(--cream); }
+  .screen-8{ background: linear-gradient(160deg, var(--rose), var(--blush)); }
+  
+  /* ---------- Petals ambient background ---------- */
+  .petals{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .petal{
+    position:absolute;
+    top:-40px;
+    width: 14px;
+    height: 14px;
+    background: var(--rose-deep);
+    opacity: 0.3;
+    border-radius: 0 60% 0 60%;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes fall{
+    0%{ transform: translateY(0) rotate(0deg); }
+    100%{ transform: translateY(110vh) rotate(300deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .petal{ animation: none; display:none; }
+  }
+  
+  /* ---------- Reveal-in-sequence within active screen ---------- */
+  .reveal{
+    opacity: 0;
+    transform: translateY(22px);
+    animation: revealUp 0.7s ease forwards;
+  }
+  .reveal.d1{ animation-delay: 0.05s; }
+  .reveal.d2{ animation-delay: 0.22s; }
+  .reveal.d3{ animation-delay: 0.4s; }
+  .reveal.d4{ animation-delay: 0.58s; }
+  @keyframes revealUp{
+    to{ opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; animation:none; }
+  }
+  
+  /* ---------- Tombol umum ---------- */
+  button{ font-family: 'Quicksand', sans-serif; }
+  
+  .btn{
+    background: var(--rose-deep);
+    color: var(--cream);
+    border: none;
+    padding: 13px 30px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(138,154,124,0.28);
+    transition: transform 0.2s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); }
+  .btn.ghost{
+    background: transparent;
+    color: var(--rose-deep);
+    border: 1.5px solid var(--rose-deep);
+    box-shadow: none;
+  }
+  button:focus-visible{
+    outline: 2px solid var(--rose-deep);
+    outline-offset: 3px;
+  }
+  
+  .next-wrap{
+    margin-top: 40px;
+  }
+  
+  /* ---------- Music button ---------- */
+  .music-btn{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 30;
+    background: var(--cream);
+    border: 1px solid var(--rose);
+    color: var(--rose-deep);
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(138,154,124,0.15);
+  }
+  
+  /* ---------- Layar 1: Game pembuka ---------- */
+  .game-intro h1{
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    color: var(--rose-deep);
+    margin-bottom: 10px;
+  }
+  .game-intro p{
+    max-width: 380px;
+    opacity: 0.8;
+    margin-bottom: 26px;
+  }
+  .game-area{
+    position: relative;
+    width: min(340px, 86vw);
+    height: 320px;
+    background: var(--cream);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(63,74,58,0.12);
+    overflow: hidden;
+  }
+  .game-hud{
+    display:flex;
+    justify-content: space-between;
+    width: min(340px, 86vw);
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: var(--rose-deep);
+    font-size: 15px;
+  }
+  .heart-target{
+    position:absolute;
+    background:none;
+    border:none;
+    font-size: 30px;
+    line-height:1;
+    cursor:pointer;
+    transform: translate(-50%,-50%) scale(0.6);
+    animation: popIn 0.25s ease forwards;
+  }
+  @keyframes popIn{ to{ transform: translate(-50%,-50%) scale(1); } }
+  .game-result h2{
+    color: var(--rose-deep);
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+  .game-result p{
+    opacity: 0.75;
+    margin-bottom: 8px;
+  }
+  .result-message{
+    max-width: 320px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--rose-deep);
+    opacity: 1 !important;
+    margin: 6px 0 26px !important;
+  }
+  .result-buttons{
+    display:flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content:center;
+  }
+  
+  /* ---------- Layar 2: Transisi kalimat ---------- */
+  .transition-line{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    color: var(--rose-deep);
+    max-width: 480px;
+  }
+  
+  /* ---------- Layar 3: Hero ---------- */
+  .eyebrow{
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    color: var(--rose-deep);
+    margin-bottom: 6px;
+  }
+  .screen-3 h1{
+    font-size: clamp(2.4rem, 8vw, 4.2rem);
+    line-height: 1.05;
+    margin: 0 0 14px;
+    color: var(--rose-deep);
+  }
+  .screen-3 .nama{ font-style: italic; }
+  .screen-3 p.sub{
+    max-width: 420px;
+    font-size: 17px;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+  
+  /* ---------- Layar 4: Surat ---------- */
+  .letter{
+    background: var(--blush);
+    border-radius: 4px;
+    padding: 44px 38px;
+    box-shadow: 0 20px 50px rgba(63,74,58,0.08);
+    border-left: 3px solid var(--rose-deep);
+    max-width: 560px;
+    text-align:left;
+  }
+  .letter h2{
+    font-size: 28px;
+    margin-top:0;
+    color: var(--rose-deep);
+    text-align:center;
+  }
+  .letter p{
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0 0 16px;
+  }
+  .signoff{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    margin-top: 16px;
+    color: var(--rose-deep);
+    text-align: right;
+  }
+  
+  /* ---------- Layar 6: Counter ---------- */
+  .counter-wrap h2{
+    color: var(--rose-deep);
+    font-size: 26px;
+    margin-bottom: 30px;
+  }
+  .counter-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 440px;
+  }
+  .counter-item{
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 18px 8px;
+    box-shadow: 0 10px 26px rgba(63,74,58,0.1);
+  }
+  .counter-item .num{
+    font-family:'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 5vw, 2.3rem);
+    color: var(--rose-deep);
+    font-weight: 600;
+    display:block;
+  }
+  .counter-item .lbl{
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 4px;
+    display:block;
+  }
+  @media (max-width: 480px){
+    .counter-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  
+  /* ---------- Layar 7: Gallery ---------- */
+  .gallery h2{
+    color: var(--rose-deep);
+    font-size: 26px;
+    margin-bottom: 32px;
+  }
+  .polaroids{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    gap: 20px;
+  }
+  .polaroid{
+    background: var(--cream);
+    padding: 10px 10px 26px;
+    box-shadow: 0 14px 30px rgba(63,74,58,0.14);
+    width: 150px;
+  }
+  .polaroid:nth-child(1){ transform: rotate(-4deg); }
+  .polaroid:nth-child(2){ transform: rotate(3deg); }
+  .polaroid:nth-child(3){ transform: rotate(-2deg); }
+  .polaroid img{
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display:block;
+    background: linear-gradient(135deg, var(--rose), var(--blush));
+  }
+  .polaroid .cap{
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  
+  /* ---------- Layar 8: Penutup ---------- */
+  .screen-8 .heart{
+    font-size: 38px;
+    color: var(--rose-deep);
+    margin-bottom: 12px;
+    display:block;
+  }
+  .screen-8 h2{
+    color: var(--rose-deep);
+    font-size: 28px;
+    margin: 0 0 10px;
+  }
+  .screen-8 p{
+    opacity: 0.75;
+    font-size: 15px;
+    max-width: 380px;
+  }
+  
+  /* ---------- Layar 5: Tulis harapan ---------- */
+  .wish-box{
+    max-width: 460px;
+    width: 100%;
+  }
+  .wish-box h2{
+    color: var(--rose-deep);
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+  .wish-box p{
+    opacity: 0.75;
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+  .wish-input{
+    width: 100%;
+    max-width: 420px;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1.5px solid var(--rose);
+    background: var(--cream);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    color: var(--plum);
+    resize: vertical;
+    box-shadow: 0 10px 26px rgba(63,74,58,0.08);
+  }
+  .wish-input:focus{
+    outline: none;
+    border-color: var(--rose-deep);
+  }
+  .wish-error{
+    color: var(--rose-deep);
+    font-size: 13px;
+    margin-top: 10px;
+    opacity: 0.9 !important;
+  }
+  .wish-box .heart{
+    font-size: 34px;
+    color: var(--rose-deep);
+    display:block;
+    margin-bottom: 10px;
+  }
